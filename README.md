@@ -8,7 +8,7 @@ The core idea:
 - **Process:** aggregate to a regular grid → learn multivariate “background” → flag **multivariate geochemical anomalies** → spatially cluster anomalies into **exploration targets**
 - **Output:** GIS-ready **GeoPackage layers** (grid anomaly map, anomaly clusters, target polygons + centroids) + **publication-style figures**
 
-This is ** Unsupervised Targeting** (a complete project without labels/covariates).  
+This is **Unsupervised Targeting** (a complete project without labels/covariates).  
 
 
 ---
@@ -193,6 +193,14 @@ Use it for:
 - regional screening (where anomalies concentrate)
 - identifying belts/trends
 - sanity-checking for “salt-and-pepper” noise
+<p align="center">
+  <img src="figures/fig1_anomaly_score_baseline.png" width="850">
+  <br>
+  <em>
+    Figure 1. Continuous anomaly score map produced by the baseline geospatial ML model, 
+    highlighting spatial variations in mineral prospectivity across the study area.
+  </em>
+</p>
 
 ### 2) `fig2_target_clusters_baseline.png` — final targets (polygons + labels)
 **What it shows:** the practical exploration output:
@@ -203,7 +211,14 @@ Use it for:
 Use it for:
 - ranked decision-making (“top 5 targets”)
 - exporting polygons to a GIS/work plan
-
+<p align="center">
+  <img src="figures/fig2_target_clusters_baseline.png" width="850">
+  <br>
+  <em>
+    Figure 2. Final target polygons derived from anomaly score clustering, 
+    with target IDs and spatial extents used for prioritisation.
+  </em>
+</p>
 ### 3) `fig3_robustness_overlay.png` — robustness overlay (baseline vs noAG)
 **What it shows:** sensitivity test:
 - baseline polygons (fill)
@@ -212,7 +227,14 @@ Use it for:
 Interpretation:
 - strong overlap ⇒ targets are **robust**
 - large shifts ⇒ targets may be **feature-sensitive**
-
+<p align="center">
+  <img src="figures/fig3_robustness_overlay.png" width="850">
+  <br>
+  <em>
+    Figure 3. Overlay comparison between the baseline model and the model trained without Ag (silver), 
+    illustrating the spatial robustness and stability of anomaly patterns.
+  </em>
+</p>
 
 ### 4) `fig4_hist_anomaly_score_baseline.png` — score distribution
 **What it shows:** histogram of `anomaly_score`.  
@@ -220,13 +242,28 @@ Use it to:
 - confirm expected long-tail behavior
 - justify contamination/threshold choices
 - compare baseline vs robustness runs
-
+<p align="center">
+  <img src="figures/fig4_hist_anomaly_score_baseline.png" width="700">
+  <br>
+  <em>
+    Figure 4. Histogram of anomaly score distribution for the baseline model, 
+    showing the separation between background and anomalous responses.
+  </em>
+</p>
 ### 5) `fig5_scatter_npoints_vs_score.png` — sampling density vs score
 **What it shows:** relationship between sampling density and anomaly score.  
 Use it to:
 - ensure high anomalies aren’t *only* from very sparse cells
 - justify the `min_points` filter (3 vs 5)
 - spot if there’s any sampling bias effect
+<p align="center">
+  <img src="figures/fig5_scatter_npoints_vs_score.png" width="700">
+  <br>
+  <em>
+    Figure 5. Relationship between sampling density (number of points) and anomaly score, 
+    used to assess potential sampling bias effects.
+  </em>
+</p>
 
 ### 6) `fig6_fingerprint_heatmap_baseline.png` — target fingerprints
 **What it shows:** enrichment/depletion signatures for each target cluster.
@@ -234,11 +271,15 @@ Use it to:
 - **rows:** target clusters
 - **columns:** elements/features
 - **color value:** `delta_log10` (cluster median minus background median)
+<p align="center">
+  <img src="figures/fig6_fingerprint_heatmap_baseline.png" width="900">
+  <br>
+  <em>
+    Figure 6. Geochemical fingerprint heatmap of final target clusters, 
+    summarising multi-element signatures that characterise each anomaly cluster.
+  </em>
+</p>
 
-Use it to:
-- explain “why this target is anomalous”
-- compare targets (different geochemical suites)
-- write a narrative (e.g., “Target 15 enriched in AG/AU relative to background”)
 
 ---
 
@@ -364,12 +405,3 @@ To upgrade into a supervised Mineral Prospectivity Mapping project, add:
 - **covariates:** geology, faults, radiometrics, magnetics, gravity, DEM derivatives, etc.
 - models such as Random Forest / XGBoost / CNN-on-rasters
 
----
-
-## License
-MIT (see `LICENSE`).
-
----
-
-## Basemap attribution (visualization only)
-When `contextily` is available, maps may use web tiles (e.g., Carto/OSM) for background visualization.
