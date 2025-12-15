@@ -8,12 +8,12 @@ The core idea:
 - **Process:** aggregate to a regular grid → learn multivariate “background” → flag **multivariate geochemical anomalies** → spatially cluster anomalies into **exploration targets**
 - **Output:** GIS-ready **GeoPackage layers** (grid anomaly map, anomaly clusters, target polygons + centroids) + **publication-style figures**
 
-This is **Option 1 — Unsupervised Targeting** (a complete project without labels/covariates).  
-If you later want a true **prospectivity probability map**, see **Next steps**.
+This is ** Unsupervised Targeting** (a complete project without labels/covariates).  
+
 
 ---
 
-## What you get (deliverables)
+## What we get 
 
 ### GIS artifacts (GeoPackage)
 Produced in `artifacts/`:
@@ -42,7 +42,7 @@ Produced in `artifacts/`:
 - `artifacts/robustness_noAG/top_targets_noAG.csv`
 - `artifacts/robustness_noAG/cluster_fingerprint_noAG.csv`
 
-> Note: filenames/layer names match the pipeline you executed and the figures you generated (`fig1` … `fig6`).
+
 
 ### Figures (PNG)
 Produced in `figures/`:
@@ -64,9 +64,9 @@ Contains:
 - stream sediment geochemistry (many elements, e.g. `CU_PPM`, `AU_PPB`, ...)
 - sample metadata (`SAMPLEID`, `SAMPLEREF`, `SAM_METH`, `MAP100K`, `MAP250K`, ...)
 
-### Audit summary from your run
+### Audit summary from run
 
-You audited the dataset (before modeling) and observed:
+The dataset is audited (before modeling) and observed:
 
 - rows: **157,520**
 - cols: **91**
@@ -113,7 +113,7 @@ same but **without `AG_PPM`** to test sensitivity.
 - aggregate geochem per cell using **median** (robust to outliers)
 - compute `n_points` per cell
 
-You observed:
+It can be observed:
 - cells with any data: **40,272**
 - after stabilization (`min_points ≥ 5`): **9,067**
 
@@ -132,7 +132,7 @@ Fit **Isolation Forest** on the transformed feature vectors.
 - `anomaly_score` is oriented so that **higher = more anomalous**
 - anomalies defined by `contamination = 0.03` (top ~3%)
 
-Stable run you reported (baseline, `min_points ≥ 5`):
+Stable run reported (baseline, `min_points ≥ 5`):
 - anomaly cells: **272**
 - threshold: ~0 (numerical near-zero due to score distribution)
 
@@ -141,7 +141,7 @@ Spatially cluster anomaly cells using **DBSCAN** on cell centroids:
 
 - `eps = 2000 m`, `min_samples = 3`
 
-Baseline clustering summary you reported:
+Baseline clustering summary reported:
 - anomaly cells clustered: **91**
 - number of clusters: **19**
 
@@ -159,7 +159,6 @@ This produces the heatmap in `fig6`.
 
 ---
 
-## Results snapshot (from your run)
 
 ### Baseline (with AG)
 - Grid:
@@ -180,7 +179,7 @@ This produces the heatmap in `fig6`.
   - clustered anomaly cells: **75**
 
 Interpretation:
-- Many targets persist even after removing AG → your targeting is **not purely driven by one element**.
+- Many targets persist even after removing AG → targeting is **not purely driven by one element**.
 
 ---
 
@@ -213,7 +212,7 @@ Use it for:
 Interpretation:
 - strong overlap ⇒ targets are **robust**
 - large shifts ⇒ targets may be **feature-sensitive**
-- if your `fig3` previously looked “less wide” than `fig1`/`fig2`: that’s usually because the plot extent was set by polygon bounds only. In this repo we recommend forcing the axis extent to the **grid bounds** so all three maps cover the same full region.
+
 
 ### 4) `fig4_hist_anomaly_score_baseline.png` — score distribution
 **What it shows:** histogram of `anomaly_score`.  
@@ -285,13 +284,12 @@ Use it to:
 ## How to run
 
 ### 1) Put raw data in place
-Copy your GeoPackage into:
+
 
 ```
-data/raw/ntgs_stream_sediments.gpkg
+data/GEOCHEM_STREAM_SEDIMENTS.csv
 ```
 
-> If your source file/layer name differs, update the loader in the notebooks or `src/io.py`.
 
 ### 2) Install dependencies
 
@@ -329,7 +327,7 @@ python scripts/50_make_figures.py
 - **Grid size:** `1000 m`  
   Based on median NN distance (~454 m); grid reduces noise and unifies sampling density.
 - **min_points:** `≥ 5`  
-  Your dataset has many sparse cells; filtering improves stability of targets.
+  Dataset has many sparse cells; filtering improves stability of targets.
 - **Isolation Forest contamination:** `0.03`  
   Produces a manageable number of anomalies (~3%) for exploration targeting.
 - **DBSCAN:** `eps = 2000 m`, `min_samples = 3`  
