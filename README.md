@@ -103,6 +103,12 @@ Produced in `figures/`:
 
 ## Dataset
 
+<p align="center">
+  <img src="figures/data_sample.png" width="900">
+  <br>
+
+</p>
+
 **NTGS Geochemistry – Stream Sediment (Northern Territory)** (open data)
 
 Contains:
