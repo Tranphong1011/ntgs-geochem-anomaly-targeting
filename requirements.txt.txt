@@ -1,0 +1,10 @@
+geopandas
+pandas
+numpy
+matplotlib
+scikit-learn
+shapely
+pyproj
+fiona
+contextily
+mapclassify
