@@ -10,6 +10,52 @@ The core idea:
 
 This is **Unsupervised Targeting** (a complete project without labels/covariates).  
 
+<p align="center">
+  <img src="figures/Distribution.png" width="900">
+  <br>
+
+</p>
+
+## Dataset spatial distribution (Stream Sediment Samples with Basemap)
+
+This map shows the **spatial footprint of my NTGS stream-sediment geochemistry dataset** (each red dot is one sample location) plotted on a basemap. The distribution is **highly non-uniform**—sampling density varies strongly across the Northern Territory—so it reflects **where surveys were conducted** rather than an even “blanket” coverage.
+
+### 1) Clear spatial clustering (survey-driven coverage)
+The samples form **distinct clusters** instead of a uniform scatter. This indicates the dataset is dominated by **campaign-style survey blocks** and **targeted exploration areas**, where sampling was intensified over specific geological provinces or tenements.
+
+### 2) Major sampled regions visible on the map
+From the pattern of dense point clouds, I can describe three broad “sampling provinces”:
+
+- **Top End / Darwin–Kakadu–western Arnhem Land zone (north, near Darwin):**  
+  A very dense cluster appears in the **north-western Top End**, close to the Darwin region and extending inland. This is consistent with strong coverage in accessible northern areas with active historical exploration and drainage networks.
+
+- **North-east / Gulf–Arnhem / eastern Top End zone:**  
+  A second dense belt appears toward the **north-eastern/eastern side** of the NT (toward the Gulf of Carpentaria side). The points often appear as **blocks and connected groups**, suggesting multiple survey programs across adjacent areas.
+
+- **Central–southern NT (around the Alice Springs region):**  
+  There is a large concentration in the **south/central-south** of NT (around the area labelled “Alice Springs”), including broad clusters and elongated patches. This looks like extensive sampling across central ranges/prospective corridors and surrounding catchments.
+
+### 3) Linear and corridor-like patterns
+Besides blobs/clusters, the map also shows **string-like or corridor patterns** (chains of points). These typically appear when sampling follows:
+- drainage lines / catchment traverses,
+- road-accessible transects,
+- systematic survey grids conducted along campaign routes.
+
+### 4) Sparse / under-sampled interior areas
+Large parts of NT show **very low point density or gaps**. This likely corresponds to:
+- limited drainage (fewer suitable stream sites in arid interiors),
+- reduced accessibility/logistics,
+- lower historical exploration intensity in some regions.
+
+### 5) What this means for analysis / ML
+This spatial pattern matters because it introduces **sampling bias**:
+- “More samples” in an area does **not** automatically mean “more anomalous geology”—it often means **more survey effort**.
+- Any model outputs (anomaly maps, targets) should be interpreted as **conditioned on survey coverage**.
+
+That’s why my workflow used **grid aggregation (e.g., 1 km cells)** and later **min_points thresholds**—to reduce the dominance of very dense clusters and make results more comparable across regions with different sampling intensity.
+
+### 6) Practical takeaway
+Overall, this map confirms my dataset has **strong coverage in the Top End and central/southern NT**, with **distinct high-density survey blocks** and **gaps elsewhere**. The dataset is therefore well-suited for an **unsupervised targeting project** (anomaly detection + clustering), as long as I keep addressing the uneven sampling density (grid + stability/robustness checks).
 
 ---
 
@@ -193,6 +239,7 @@ Use it for:
 - regional screening (where anomalies concentrate)
 - identifying belts/trends
 - sanity-checking for “salt-and-pepper” noise
+
 <p align="center">
   <img src="figures/fig1_anomaly_score_baseline.png" width="850">
   <br>
@@ -211,6 +258,7 @@ Use it for:
 Use it for:
 - ranked decision-making (“top 5 targets”)
 - exporting polygons to a GIS/work plan
+
 <p align="center">
   <img src="figures/fig2_target_clusters_baseline.png" width="850">
   <br>
@@ -219,6 +267,7 @@ Use it for:
     with target IDs and spatial extents used for prioritisation.
   </em>
 </p>
+
 ### 3) `fig3_robustness_overlay.png` — robustness overlay (baseline vs noAG)
 **What it shows:** sensitivity test:
 - baseline polygons (fill)
@@ -227,6 +276,7 @@ Use it for:
 Interpretation:
 - strong overlap ⇒ targets are **robust**
 - large shifts ⇒ targets may be **feature-sensitive**
+
 <p align="center">
   <img src="figures/fig3_robustness_overlay.png" width="850">
   <br>
@@ -236,12 +286,14 @@ Interpretation:
   </em>
 </p>
 
+
 ### 4) `fig4_hist_anomaly_score_baseline.png` — score distribution
 **What it shows:** histogram of `anomaly_score`.  
 Use it to:
 - confirm expected long-tail behavior
 - justify contamination/threshold choices
 - compare baseline vs robustness runs
+
 <p align="center">
   <img src="figures/fig4_hist_anomaly_score_baseline.png" width="700">
   <br>
@@ -250,12 +302,14 @@ Use it to:
     showing the separation between background and anomalous responses.
   </em>
 </p>
+
 ### 5) `fig5_scatter_npoints_vs_score.png` — sampling density vs score
 **What it shows:** relationship between sampling density and anomaly score.  
 Use it to:
 - ensure high anomalies aren’t *only* from very sparse cells
 - justify the `min_points` filter (3 vs 5)
 - spot if there’s any sampling bias effect
+
 <p align="center">
   <img src="figures/fig5_scatter_npoints_vs_score.png" width="700">
   <br>
@@ -271,6 +325,7 @@ Use it to:
 - **rows:** target clusters
 - **columns:** elements/features
 - **color value:** `delta_log10` (cluster median minus background median)
+
 <p align="center">
   <img src="figures/fig6_fingerprint_heatmap_baseline.png" width="900">
   <br>
